@@ -71,16 +71,26 @@ def main():
         rules_plus_game = 'sudoku_nr_example.txt'
         
         filenames       = [rules_file, game_file] #[rules file name, example file name]
-        with open(rules_plus_game,'w') as outfile:  
+        with open(rules_plus_game,'w') as outfile:  #concatenation of Rules and Game
                 for file in filenames:
                         with open(file) as infile:
                                 outfile.write(infile.read())
+                                
         #Getting the number of clauses in the game file to update the number of clauses in rules+game file
         lines_list    = open(rules_plus_game).readlines()
-        temp          = lines_list[1].strip("\n").split()
+        
+        if lines_list[0].split(" ")[0] == "c":
+                temp          = lines_list[1].strip("\n").split()
+        elif lines_list[0].split(" ")[0] == "p":
+                temp          = lines_list[0].strip("\n").split()
+        
         temp[-1]      = str(int(temp[-1]) + len(open(game_file).readlines())) + "\n"
         temp          = " ".join(temp)
-        lines_list[1] = temp
+        
+        if lines_list[0].split(" ")[0] == "c":
+                lines_list[1] = temp
+        elif lines_list[0].split(" ")[0] == "p":
+                lines_list[0] = temp
     
         open(rules_plus_game,'w').write("".join(lines_list))
     #__________________#
